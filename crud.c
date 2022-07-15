@@ -34,15 +34,15 @@ void CreatePokedexEntry(){
     scanf ("%s", type);
     printf("Quelle est la zone de rencontre avec le pokemon ?\n");
     scanf ("%s", zone);
-    printf("Quand l'avez-vous découvert ?\n");
+    printf("Quand l'avez-vous dÃ©couvert ?\n");
     scanf ("%s", date_dec);
     while(1){
-        printf("Avez-vous capturé ce pokémon ?\n");
+        printf("Avez-vous capturÃ© ce pokÃ©mon ?\n");
         printf("1 - OUI\n");
         printf("2 - NON\n");
         scanf ("%s", yesno);
         if (strcmp(yesno,"1") == 0){
-            printf("Quand l'avez-vous capturé ?\n");
+            printf("Quand l'avez-vous capturÃ© ?\n");
             scanf ("%s", date_capt);
             break;
         }
@@ -51,12 +51,12 @@ void CreatePokedexEntry(){
             break;
         }
         else
-            printf("La valeur rentrée n'est pas correcte\n");
+            printf("La valeur rentrÃ©e n'est pas correcte\n");
     }
     free(yesno);
 }
 
-void ReadPokedex()
+void DisplayPokedex()  // affiche le contenu de la liste chaÃ®nÃ©e
 {
     FILE *fPointer;
     fPointer = fopen(CSV_FILE_TO_READ,"r");
@@ -66,30 +66,25 @@ void ReadPokedex()
         printf("\nCould not open file %s",CSV_FILE_TO_READ);
         return;
     }
-    // lis le fichier et créé la liste chaînée
+    // lis le fichier et crÃ©Ã© la liste chaÃ®nÃ©e
     char parsedLine[120];
     while(fgets(parsedLine, 120, fPointer) != NULL)
     {
-        struct pokedex *pokedex = malloc(sizeof(struct pokedex));
+        struct pokedex *pokemons = malloc(sizeof(struct pokedex));
 
         char *getNom = strtok(parsedLine, ";");
-        strcpy(pokedex->Nom, getNom);
+        strcpy(pokemons->Nom, getNom);
 
         char *getType = strtok(NULL, ";");
-        strcpy(pokedex->Type, getType);
+        strcpy(pokemons->Type, getType);
 
         char *getZone = strtok(NULL, ";");
-        strcpy(pokedex->Zone, getZone);
+        strcpy(pokemons->Zone, getZone);
 
-        pokedex->next = head;
-        head = pokedex;
+        pokemons->next = head;
+        head = pokemons;
     }
     fclose(fPointer);
-}
-
-void DisplayPokedex()  // affiche le contenu de la liste chaînée
-{
-    ReadPokedex();
     struct pokedex *temp;
     temp=head;
     while(temp!=NULL)
@@ -107,7 +102,7 @@ void UpdatePokedex()
     temp=head;
     char *updateentry = malloc(sizeof(char) * 50);    
     while(1){
-        printf("\nVoulez-vous afficher le Pokédex avant ?\n");
+        printf("\nVoulez-vous afficher le PokÃ©dex avant ?\n");
         printf("1 - OUI\n");
         printf("2 - NON\n");
         scanf ("%s", updateentry);
@@ -116,7 +111,7 @@ void UpdatePokedex()
             {
                 printf("%s %s %s \n",temp->Nom,temp->Type,temp->Zone);
                 temp = temp->next;
-                printf("Quel est le nom du pokémon à changer ?\n");
+                printf("Quel est le nom du pokÃ©mon Ã  changer ?\n");
                 scanf ("%s", updateentry);
                 strcpy(temp->Nom, updateentry);
                 
@@ -124,13 +119,13 @@ void UpdatePokedex()
             }
         }
         else if (strcmp(updateentry,"2") == 0){
-            printf("Quel est le nom du pokémon à changer ?\n");
+            printf("Quel est le nom du pokÃ©mon Ã  changer ?\n");
             scanf ("%s", updateentry);
             strcpy(temp->Nom, updateentry);
             break;
         }
         else {
-            printf("La valeur rentrée n'est pas correcte\n");
+            printf("La valeur rentrÃ©e n'est pas correcte\n");
             return;
         } 
     }
@@ -154,7 +149,7 @@ void UpdatePokedex()
 
     new_node->updateentry = malloc(20*sizeof(char));
     if(!new_node->updateentry) {
-        printf("Mauvaise entrée, veuillez en entrer une nouvelle\n");
+        printf("Mauvaise entrÃ©e, veuillez en entrer une nouvelle\n");
         return;
     }
     strcpy(new_node->updateentry,updateentry);
@@ -167,12 +162,12 @@ void DeletePokedexEntry(){
     temp=head;
     char *deleteentry = malloc(sizeof(char) * 50);    
     while(1){
-        printf("\nVoulez-vous afficher le Pokédex avant ?\n");
+        printf("\nVoulez-vous afficher le PokÃ©dex avant ?\n");
         printf("1 - OUI\n");
         printf("2 - NON\n");
         scanf ("%s", deleteentry);
         if (strcmp(deleteentry,"1") == 0){
-            printf("Quel est le nom du pokémon à supprimer ?\n");
+            printf("Quel est le nom du pokÃ©mon Ã  supprimer ?\n");
             scanf ("%s", deleteentry);
             if(head != NULL){
                 // store the old value of head pointer   
@@ -188,7 +183,7 @@ void DeletePokedexEntry(){
         }
 
         else if (strcmp(deleteentry,"2") == 0){
-            printf("Quel est le nom du pokémon à supprimer ?\n");
+            printf("Quel est le nom du pokÃ©mon Ã  supprimer ?\n");
             scanf ("%s", deleteentry);
             strcpy(temp->Nom, deleteentry);
             if(head != NULL){
@@ -205,7 +200,7 @@ void DeletePokedexEntry(){
         }
 
         else {
-            printf("La valeur rentrée n'est pas correcte\n");
+            printf("La valeur rentrÃ©e n'est pas correcte\n");
             return;
         } 
     }
@@ -241,7 +236,7 @@ void sigint_handler(int sig)
     signal(SIGINT, sigint_handler);
     char *ctrlc = malloc(sizeof(char) * 50);    
     while(1){
-        printf("\nEtes-vous sûr de vouloir quitter ?\n");
+        printf("\nEtes-vous sÃ»r de vouloir quitter ?\n");
         printf("1 - OUI\n");
         printf("2 - NON\n");
         scanf ("%s", ctrlc);
@@ -253,7 +248,7 @@ void sigint_handler(int sig)
             return;
         }
         else {
-            printf("La valeur rentrée n'est pas correcte\n");
+            printf("La valeur rentrÃ©e n'est pas correcte\n");
             return;
         } 
     }
@@ -264,7 +259,7 @@ void QuitGame()
 {
     char *quit = malloc(sizeof(char) * 50);
     while(1){
-        printf("Etes-vous sûr de vouloir quitter ?\n");
+        printf("Etes-vous sÃ»r de vouloir quitter ?\n");
         printf("1 - OUI\n");
         printf("2 - NON\n");
         scanf ("%s", quit);
@@ -276,7 +271,7 @@ void QuitGame()
             return;
         }
         else {
-            printf("La valeur rentrée n'est pas correcte\n");
+            printf("La valeur rentrÃ©e n'est pas correcte\n");
             return;
         }
     }
